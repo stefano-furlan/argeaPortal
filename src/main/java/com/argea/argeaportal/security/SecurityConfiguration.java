@@ -17,6 +17,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
 
 
+    //TODO: agganciare security a tabella (per ora) o con SAML2 (da office365)
     /***
      * QUI CONFIGURIAMO GLI UTENTI(al momento metto un utente statico, poi mettiamo gli utenti nel db)
      * @return
@@ -48,6 +49,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.httpBasic();  //usa basic authentication
+
 
         //qui di seguito metto la sicurezza sui vari endpoint (non è l'unico modo, ce n'è un altro più carino, ma ti spiego poi)
         http.authorizeRequests(authorizeRequests ->

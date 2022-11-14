@@ -22,10 +22,14 @@ public class RestMasterDataController {
     ClienteArgea saveClienteArgea(@RequestBody ClienteArgea clienteArgea) {
 
         //TODO: aggiungere eventuali controlli di integrità
-
         return clienteArgeaRepository.save(clienteArgea);
 
     }
+
+
+    //TODO: metodo per esporre a fonte dati esterna (QLIK) la tabella di transcodifica
+
+
 
 
 }
