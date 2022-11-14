@@ -6,6 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.5</version>
+
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.argea</groupId>
@@ -15,6 +16,8 @@
     <description>argeaPortal</description>
     <properties>
         <java.version>19</java.version>
+        <spring-security.version>5.7.5</spring-security.version>  <!-- ATTENZIONE, anticipata versione spring perchè la 5.7.4 ha buco di sicurezza -->
+        <snakeyaml.version>1.33</snakeyaml.version>   <!-- vulnerabilità triviale, metto solo per far sparire il warning-->
     </properties>
     <dependencies>
         <dependency>
@@ -65,5 +68,26 @@
             </plugin>
         </plugins>
     </build>
+
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+                <!--                <jdbc.url>jdbc:sqlserver://10.0.11.59:1433;databaseName=portal_dev</jdbc.url>-->
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+                <!--                <jdbc.url>jdbc:sqlserver://localhost:1433;databaseName=portal</jdbc.url>-->
+            </properties>
+        </profile>
+    </profiles>
 
 </project>
