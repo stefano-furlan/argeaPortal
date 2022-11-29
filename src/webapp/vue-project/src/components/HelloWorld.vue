@@ -1,0 +1,65 @@
+<template>
+  <div >
+    <h1>DEMO</h1>
+  </div>
+</template>
+<script>
+
+export default {
+  //components: { InterventoManutenzioneEditor},
+  //mixins: [globalMixins, agGridMixins],
+  data() {
+    return {
+
+      //window workings
+      isLoading: false,
+
+      //DATA
+    }
+  },
+  beforeMount: function () {
+
+  },
+  mounted() {
+    this.init();
+  },
+  computed: {},
+  watch: {},
+  methods: {
+    async init() {
+
+    },
+    getData() {
+
+    },
+
+
+  }
+}
+</script>
+
+
+
+<style scoped>
+h1 {
+  font-weight: 500;
+  font-size: 2.6rem;
+  top: -10px;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+.greetings h1,
+.greetings h3 {
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .greetings h1,
+  .greetings h3 {
+    text-align: left;
+  }
+}
+</style>

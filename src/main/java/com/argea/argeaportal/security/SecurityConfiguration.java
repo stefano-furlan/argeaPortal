@@ -1,6 +1,7 @@
 package com.argea.argeaportal.security;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,17 +12,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.sql.DataSource;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfiguration {
 
 
-    //TODO: agganciare security a tabella (per ora) o con SAML2 (da office365)
-    /***
+    @Autowired
+    private DataSource dataSource;
+
+   /*
+   * security triviale
+   * *//***
      * QUI CONFIGURIAMO GLI UTENTI(al momento metto un utente statico, poi mettiamo gli utenti nel db)
      * @return
-     */
+     *//*
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
         var userDetailsService =
@@ -34,15 +41,15 @@ public class SecurityConfiguration {
         return userDetailsService;
     }
 
-    /***
+    *//***
      * qui a regime useremo un encoder corretto(con salatura della pass ecc)
      * questo è solo per vedere
      * @return
-     */
+     *//*
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
-    }
+    }*/
 
 
     @Bean
@@ -55,6 +62,7 @@ public class SecurityConfiguration {
         http.authorizeRequests(authorizeRequests ->
                         authorizeRequests
                                 .antMatchers("/rs/test/**").permitAll() //qui tutti possono entrare
+                                .antMatchers("/rs/md/**").permitAll()//TODO: abilitare role based security
                                 .antMatchers("/rs/auth/**").authenticated()   //qui devo mettere la password
                                 .anyRequest().authenticated()
                 );
