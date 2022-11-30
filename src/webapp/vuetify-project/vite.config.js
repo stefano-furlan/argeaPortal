@@ -32,5 +32,34 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+        proxy: {
+      // string shorthand
+      /* '/foo': 'http://localhost:4567',*/
+      // with options
+      /*      '/api': {
+              target: 'http://jsonplaceholder.typicode.com',
+              changeOrigin: true,
+              rewrite: (path) => path.replace(/^\/api/, '')
+            },*/
+      // with RegEx
+      /*      '^/fallback/.*': {
+              target: 'http://jsonplaceholder.typicode.com',
+              changeOrigin: true,
+              rewrite: (path) => path.replace(/^\/fallback/, '')
+            },*/
+      // Using the proxy instance
+      '/rs': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        configure: (proxy, options) => {
+          // proxy will be an instance of 'http-proxy'
+        }
+      },
+      // Proxying websockets or socket.io
+      /*      '/socket.io': {
+              target: 'ws://localhost:5173',
+              ws: true
+            }*/
+    }
   },
 })

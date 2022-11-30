@@ -1,5 +1,16 @@
 <template>
   <v-app id="inspire">
+
+
+    <v-app-bar>
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+
+      <v-spacer></v-spacer>
+      <v-img width="20" src="/src/assets/argea.png"></v-img>
+      <v-spacer></v-spacer>
+      <v-icon icon="mdi:mdi-logout-variant" />
+
+    </v-app-bar>
     <v-navigation-drawer
       image="/src/assets/argeamenu.png"
       permanent
@@ -16,15 +27,8 @@
                      value="administration" to="/administration"></v-list-item>
       </v-list>
     </v-navigation-drawer>
-
-    <v-app-bar>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-toolbar-title>Application</v-toolbar-title>
-    </v-app-bar>
-
     <v-main>
-      <!--  -->
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
