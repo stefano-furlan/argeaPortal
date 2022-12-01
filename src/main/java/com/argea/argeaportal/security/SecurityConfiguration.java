@@ -64,8 +64,11 @@ public class SecurityConfiguration {
                                 .antMatchers("/rs/test/**").permitAll() //qui tutti possono entrare
                                 .antMatchers("/rs/md/**").permitAll()//TODO: abilitare role based security
                                 .antMatchers("/rs/auth/**").authenticated()   //qui devo mettere la password
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 );
+
+        http.csrf().disable();//TODO:LEVARE!SOLO PER Demo
+
 
         return http.build();
     }

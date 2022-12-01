@@ -1,7 +1,11 @@
 package com.argea.argeaportal.rest;
 
-import com.argea.argeaportal.database.ClienteArgea;
-import com.argea.argeaportal.database.ClienteArgeaRepository;
+import com.argea.argeaportal.database.clienteargea.ClienteArgea;
+import com.argea.argeaportal.database.clienteargea.ClienteArgeaRepository;
+import com.argea.argeaportal.database.clientecompany.ClienteCompany;
+import com.argea.argeaportal.database.clientecompany.ClienteCompanyRepository;
+import com.argea.argeaportal.dto.ClienteArgeaDto;
+import com.argea.argeaportal.services.ClienteArgeaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +18,12 @@ public class RestMasterDataController {
     @Autowired
     ClienteArgeaRepository clienteArgeaRepository;
 
+    @Autowired
+    ClienteCompanyRepository clienteCompanyRepository;
+
+    @Autowired
+    ClienteArgeaService clienteArgeaService;
+
     @GetMapping("/ping")
     String ping() {
         return "ping RestMasterDataController";
@@ -21,16 +31,19 @@ public class RestMasterDataController {
 
 
     @PostMapping("/cliente-argea")
-    ClienteArgea saveClienteArgea(@RequestBody ClienteArgea clienteArgea) {
-
+    ClienteArgeaDto saveClienteArgea(@RequestBody ClienteArgeaDto clienteArgea) {
         //TODO: aggiungere eventuali controlli di integrità
-        return clienteArgeaRepository.save(clienteArgea);
-
+        return clienteArgeaService.salvaClienteArgea(clienteArgea);
     }
 
     @GetMapping("/cliente-argea")
-    Optional<ClienteArgea> getCliente(@RequestParam(value = "idCliente") Integer idCliente){
-        return clienteArgeaRepository.findById(idCliente);
+    Optional<ClienteArgeaDto> getCliente(@RequestParam(value = "id") Integer idCliente){
+        return clienteArgeaService.getClienteArgea(idCliente);
+    }
+
+    @PutMapping("/cliente-argea")
+    ClienteArgeaDto salvaClienteArgea(@RequestBody  ClienteArgeaDto clienteArgeaDto){
+        return clienteArgeaService.salvaClienteArgea(clienteArgeaDto);
     }
 
     @GetMapping("/clienti-argea")
@@ -38,9 +51,10 @@ public class RestMasterDataController {
         return clienteArgeaRepository.findAll();
     }
 
-
-    //TODO: metodo per esporre a fonte dati esterna (QLIK) la tabella di transcodifica
-
+    @GetMapping("/clienti-company")
+    Iterable<ClienteCompany> getClientiGestionali(){
+        return clienteCompanyRepository.findAll();
+    }
 
 
 

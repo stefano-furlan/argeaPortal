@@ -1,10 +1,7 @@
-package com.argea.argeaportal.database;
+package com.argea.argeaportal.database.clienteargea;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "cliente_argea")

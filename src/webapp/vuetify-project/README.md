@@ -42,3 +42,19 @@ pnpm build
 ### Customize configuration
 
 See [Configuration Reference](https://vitejs.dev/config/).
+
+
+### DATA TABLE
+https://hc200ok.github.io/vue3-easy-data-table-doc/
+
+### FONTS
+
+```sh
+https://materialdesignicons.com/
+```
+
+### FRAMEWORK CONTROLLI FE
+
+```sh
+https://next.vuetifyjs.com/en/
+```

@@ -8,18 +8,20 @@
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
+    "axios": "^1.2.0",
+    "lodash": "^4.17.21",
+    "pinia": "^2.0.26",
     "roboto-fontface": "*",
     "vue": "^3.2.38",
+    "vue-router": "^4.1.6",
+    "vue3-easy-data-table": "^1.5.17",
     "vuetify": "^3.0.0",
-    "webfontloader": "^1.0.0",
-    "axios": "^1.2.0",
-    "pinia": "^2.0.26",
-    "vue-router": "^4.1.6"
+    "webfontloader": "^1.0.0"
   },
   "devDependencies": {
+    "@mdi/font": "^7.0.96",
     "@vitejs/plugin-vue": "^3.0.3",
-    "vite-plugin-vuetify": "^1.0.0-alpha.12",
     "vite": "^3.1.9",
-    "@mdi/font": "^7.0.96"
+    "vite-plugin-vuetify": "^1.0.0-alpha.12"
   }
 }

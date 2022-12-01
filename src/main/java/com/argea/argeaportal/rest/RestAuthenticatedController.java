@@ -1,7 +1,6 @@
 package com.argea.argeaportal.rest;
 
-import com.argea.argeaportal.database.ClienteArgea;
-import com.argea.argeaportal.database.ClienteArgeaRepository;
+import com.argea.argeaportal.database.clienteargea.ClienteArgeaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="app-argea">
 
 
     <v-app-bar>
@@ -33,8 +33,17 @@
   </v-app>
 </template>
 
-<script>
+<script >
 export default {
   data: () => ({ drawer: null }),
 }
 </script>
+
+<style >
+.menuimage .v-navigation-drawer__content {
+  background: -moz-linear-gradient(156deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 90%);
+  background: -o-linear-gradient(156deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 90%);
+  background: -ms-linear-gradient(156deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 90%);
+  background: linear-gradient(156deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 90%);
+}
+</style>
