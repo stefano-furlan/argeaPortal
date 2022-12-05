@@ -7,8 +7,10 @@
         <v-col cols="12"
                md="5">
           <v-card class="padded-card">
-            <v-toolbar density="compact"  color="primary">
-              <v-toolbar-title> <span v-show="clienteArgeaLocalInEdit!=null && clienteArgeaLocalInEdit.id==null">NUOVO</span>  CLIENTE ARGEA</v-toolbar-title>
+            <v-toolbar density="compact" color="primary">
+              <v-toolbar-title><span
+                v-show="clienteArgeaLocalInEdit!=null && clienteArgeaLocalInEdit.id==null">NUOVO</span> CLIENTE ARGEA
+              </v-toolbar-title>
 
               <v-spacer></v-spacer>
               <v-btn icon @click="salvaClienteArgea()">
@@ -95,8 +97,50 @@
                   <v-icon icon="mdi-drag" size="small" draggable="true" class="draggable"
                           v-show="item.codiceClienteArgea==null"
                           @dragstart="startDrag($event, item)"></v-icon>
-                  <v-icon icon="mdi-account-check" size="small" v-show="item.codiceClienteArgea!=null && item.codiceClienteArgea==clienteArgeaLocalInEdit.id"></v-icon>
-                  <v-icon icon="mdi-account-cancel" size="small" v-show="item.codiceClienteArgea!=null && item.codiceClienteArgea!=clienteArgeaLocalInEdit.id"></v-icon>
+
+                  <!--                  <v-menu  open-on-hover
+                                             :close-on-content-click="false"
+                                             absolute
+                                             offset-y>
+                  &lt;!&ndash;                    <template v-slot:activator="{ on ,attrs }">
+                                        <v-icon v-bind="attrs"  v-on="on" icon="mdi-account-check" size="small"
+                                                v-show="item.codiceClienteArgea!=null && item.codiceClienteArgea==clienteArgeaLocalInEdit.id"></v-icon>
+                                        <v-icon v-bind="attrs"  v-on="on" icon="mdi-account-cancel" size="small"
+                                                v-show="item.codiceClienteArgea!=null && item.codiceClienteArgea!=clienteArgeaLocalInEdit.id"></v-icon>
+                                      </template>
+                                      MENU!&ndash;&gt;
+                                      <template v-slot:activator="{ on, attrs }">
+                                        <v-btn
+                                          color="indigo"
+                                          dark
+                                          v-bind="attrs"
+                                          v-on="on"
+                                        >
+                                          Menu as Popover
+                                        </v-btn>
+                                      </template>
+                                      <v-card>
+                                        AZZ!
+                                      </v-card>
+                                    </v-menu>-->
+                  <v-menu
+                    open-on-hover
+                    close-on-content-click
+
+                  >
+                    <template v-slot:activator="{ props }">
+
+                      <v-icon v-bind="props" icon="mdi-account-check" size="small"
+                              v-show="item.codiceClienteArgea!=null && item.codiceClienteArgea==clienteArgeaLocalInEdit.id"></v-icon>
+                      <v-icon v-bind="props" icon="mdi-account-cancel" size="small"
+                              v-show="item.codiceClienteArgea!=null && item.codiceClienteArgea!=clienteArgeaLocalInEdit.id"></v-icon>
+
+                    </template>
+
+                    <v-card>
+                      <cliente-argea-info :cliente-argea-id="item.codiceClienteArgea"></cliente-argea-info>
+                    </v-card>
+                  </v-menu>
                 </template>
 
               </EasyDataTable>
@@ -117,9 +161,11 @@
 import apiClientiArgea from "@/web-api/apiClientiArgea";
 import find from "lodash/find";
 import remove from 'lodash/remove';
+import ClienteArgeaInfo from "@/components/ClienteArgeaInfo";
 
 export default {
   name: "ClienteArgeaEdit",
+  components: {ClienteArgeaInfo},
   props: {
     clienteArgeaInEdit: Object // previously was `value: String`
   },
@@ -156,9 +202,15 @@ export default {
 
       clienteTest: null,
 
+
       //DATA
       clientiCompany: [],
       clientiCompanyDelClienteArgea: [],
+
+      fav: true,
+      menu: false,
+      message: false,
+      hints: true,
 
     }
   },
@@ -190,6 +242,8 @@ export default {
       apiClientiArgea.methods.getClientiCompany(paramsClienti).then(function (response) {
         this.isLoadingClientiCompany = false;
         this.clientiCompany = response.data;
+      }.bind(this)).catch(function () {
+        this.isLoadingClientiCompany = false;
       }.bind(this));
 
       this.isLoadingClienteArgea = true;
@@ -198,6 +252,8 @@ export default {
         apiClientiArgea.methods.getClienteArgea(paramsClienteArgea).then(function (response) {
           this.isLoadingClienteArgea = false;
           this.clienteArgeaLocalInEdit = response.data;
+        }.bind(this)).catch(function () {
+          this.isLoadingClientiCompany = false;
         }.bind(this));
       } else {
         this.isLoadingClienteArgea = false;
