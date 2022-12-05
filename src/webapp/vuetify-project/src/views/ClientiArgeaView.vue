@@ -13,6 +13,7 @@
       <EasyDataTable
         :headers="headers"
         :items="clientiArgea"
+        alternating
       >
         <template #item-azioni="item">
           <v-btn icon color="primary" size="small" @click="editClienteArgea(item)" variant="text">
@@ -88,8 +89,8 @@ export default {
       //window workings
       isLoading: false,
       headers: [
-        {text: "ID", value: "id"},
-        {text: "Descrizione", value: "descrizione"},
+        {text: "ID", value: "id", sortable: true },
+        {text: "Descrizione", value: "descrizione", sortable: true },
         {text: "", value: "azioni", width: 200},
       ],
       isClienteEditShown: false,

@@ -34,7 +34,7 @@ public class ClienteArgeaService {
     public Optional<ClienteArgeaDto> getClienteArgea(Integer idCliente) {
         Optional<ClienteArgea> clienteArgea = clienteArgeaRepository.findById(idCliente);
 
-        if(!clienteArgea.isPresent()){
+        if (!clienteArgea.isPresent()) {
             //FIXME: creare eccezione e gestire a livello generale
             return null;
         }
@@ -63,17 +63,16 @@ public class ClienteArgeaService {
     public ClienteArgeaDto salvaClienteArgea(ClienteArgeaDto clienteArgeaDto) {
 
         //controlli di integrità//non devo poter salvare un cliente argea con stessa descrizione di uno diverso che esiste già
-        List<ClienteArgea> clientiArgea=null;
-        if(clienteArgeaDto.getId()==null){
-            clientiArgea= clienteArgeaRepository.findAllByDescrizioneIgnoreCase(clienteArgeaDto.getDescrizione());
-        }else{
-            clientiArgea= clienteArgeaRepository.findAllByDescrizioneIgnoreCaseAndIdNot(clienteArgeaDto.getDescrizione(),clienteArgeaDto.getId());
+        List<ClienteArgea> clientiArgea = null;
+        if (clienteArgeaDto.getId() == null) {
+            clientiArgea = clienteArgeaRepository.findAllByDescrizioneIgnoreCase(clienteArgeaDto.getDescrizione());
+        } else {
+            clientiArgea = clienteArgeaRepository.findAllByDescrizioneIgnoreCaseAndIdNot(clienteArgeaDto.getDescrizione(), clienteArgeaDto.getId());
         }
-        if(clientiArgea!=null && !clientiArgea.isEmpty()){
+        if (clientiArgea != null && !clientiArgea.isEmpty()) {
             //ERRORE!
             throw new PortalOperationNotPermittedException("Esiste già un cliente argea con questa descrizione");
         }
-
 
 
         ClienteArgea clienteArgea;
@@ -105,10 +104,13 @@ public class ClienteArgeaService {
         return clienteArgeaDto;
     }
 
-    public void eliminaClienteArgea(ClienteArgeaDto clienteArgeaDto){
+    public void eliminaClienteArgea(ClienteArgeaDto clienteArgeaDto) {
         //controlli di integrità
-      Optional<ClienteArgea> clienteArgea=  clienteArgeaRepository.findById(clienteArgeaDto.getId());
-        if(clienteArgea.isPresent()){
+        Optional<ClienteArgea> clienteArgea = clienteArgeaRepository.findById(clienteArgeaDto.getId());
+        if (clienteArgea.isPresent()) {
+            //TODO: fixme hibernate!
+            List<ClienteCompanyClienteArgea> legami = clienteCompanyClienteArgeaRepository.findAllByCodiceClienteArgea(clienteArgea.get().getId());
+            clienteCompanyClienteArgeaRepository.deleteAll(legami);
             clienteArgeaRepository.delete(clienteArgea.get());
         }
     }
