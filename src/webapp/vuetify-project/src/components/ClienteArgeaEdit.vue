@@ -1,69 +1,73 @@
 <template>
   <div>
 
-    <v-progress-linear v-show="isLoading" indeterminate color="black"></v-progress-linear>
-
-
-    <div v-if="clienteArgeaLocalInEdit!=null">
+    <div>
       <v-row>
 
         <v-col cols="12"
                md="5">
           <v-card class="padded-card">
-            <v-toolbar density="compact" title="CLIENTE ARGEA" color="primary">
+            <v-toolbar density="compact"  color="primary">
+              <v-toolbar-title> <span v-show="clienteArgeaLocalInEdit!=null && clienteArgeaLocalInEdit.id==null">NUOVO</span>  CLIENTE ARGEA</v-toolbar-title>
+
               <v-spacer></v-spacer>
               <v-btn icon @click="salvaClienteArgea()">
                 <v-icon>mdi-content-save</v-icon>
               </v-btn>
             </v-toolbar>
-            <v-form v-model="isValid">
-              <v-container>
-                <v-row>
-                  <v-col
-                    cols="12"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="clienteArgeaLocalInEdit.id"
-                      label="codice argea"
-                      disabled variant="outlined"
-                      density="compact"
-                      hide-details="auto"
-                    ></v-text-field>
-                  </v-col>
+            <v-progress-linear v-show="isLoadingClienteArgea" indeterminate color="primary"></v-progress-linear>
+            <div v-if="clienteArgeaLocalInEdit!=null">
+              <v-form ref="formClienteArgea" v-model="isFormClienteArgeaValid">
+                <v-container>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <v-text-field
+                        v-model="clienteArgeaLocalInEdit.id"
+                        label="codice argea"
 
-                  <v-col
-                    cols="12"
-                    md="8"
-                  >
-                    <v-text-field
-                      v-model="clienteArgeaLocalInEdit.descrizione"
-                      :rules="nameRules"
-                      label="descrizione"
-                      variant="outlined"
-                      density="compact"
-                      hide-details="auto"
-                    ></v-text-field>
-                  </v-col>
+                        disabled variant="outlined"
+                        density="compact"
+                        hide-details="auto"
+                      ></v-text-field>
+                    </v-col>
 
-                </v-row>
-              </v-container>
-            </v-form>
+                    <v-col
+                      cols="12"
+                      md="8"
+                    >
+                      <v-text-field
+                        v-model="clienteArgeaLocalInEdit.descrizione"
+                        ref="descrizione"
+                        :rules="nameRules"
+                        label="descrizione"
+                        variant="outlined"
+                        density="compact"
+                        hide-details="auto"
+                      ></v-text-field>
+                    </v-col>
+
+                  </v-row>
+                </v-container>
+              </v-form>
 
 
-            <EasyDataTable
-              :headers="headersClientiCompanySelezionati"
-              :items="clienteArgeaLocalInEdit.clientiCompany"
-              class="drop-zone"
-              @drop="onDrop($event)"
-              @dragover.prevent
-              @dragenter.prevent
-            >
-              <template #item-maniglia="item">
-                <v-icon icon="mdi-drag" size="small" draggable="true" class="draggable"
-                        @dragstart="startDragRemove($event, item)"></v-icon>
-              </template>
-            </EasyDataTable>
+              <EasyDataTable
+                :headers="headersClientiCompanySelezionati"
+                :items="clienteArgeaLocalInEdit.clientiCompany"
+                class="drop-zone"
+                @drop="onDrop($event)"
+                @dragover.prevent
+                @dragenter.prevent
+              >
+                <template #item-maniglia="item">
+                  <v-icon icon="mdi-drag" size="small" draggable="true" class="draggable"
+                          @dragstart="startDragRemove($event, item)"></v-icon>
+                </template>
+              </EasyDataTable>
+            </div>
           </v-card>
 
         </v-col>
@@ -71,12 +75,13 @@
                md="7">
           <v-card class="padded-card">
             <v-toolbar density="compact" title="CLIENTI COMPANY" color="grey">
-
-
             </v-toolbar>
+
             <v-card-text>
               <v-text-field label="filtra" v-model="searchField" variant="underlined" density="compact"></v-text-field>
+              <v-progress-linear v-show="isLoadingClientiCompany" indeterminate color="primary"></v-progress-linear>
               <EasyDataTable
+                v-show="isLoadingClientiCompany==false"
                 :headers="headersClientiCompany"
                 :items="filteredClientiCompany"
                 alternating
@@ -86,10 +91,6 @@
                 @dragover.prevent
                 @dragenter.prevent
               >
-                <template #loading>
-                  AAAA
-                  <v-progress-circular XXv-show="isLoadingClienti" indeterminate color="primary"></v-progress-circular>
-                </template>
                 <template #item-maniglia="item">
                   <v-icon icon="mdi-drag" size="small" draggable="true" class="draggable"
                           v-show="item.codiceClienteArgea==null"
@@ -121,14 +122,14 @@ export default {
   props: {
     clienteArgeaInEdit: Object // previously was `value: String`
   },
-  emits: ['update:clienteArgeaInEdit'],
+  emits: ['clienteSalvato'],
   data() {
     return {
       //window workings
       clienteArgeaLocalInEdit: null,
-      isLoading: false,
-      isLoadingClienti: false,
-      isValid: false,
+      isLoadingClienteArgea: false,
+      isLoadingClientiCompany: false,
+      isFormClienteArgeaValid: true,
       headersClientiCompanySelezionati: [
         {text: "", value: "maniglia", width: 25},
         {text: "company", value: "company"},
@@ -183,24 +184,22 @@ export default {
     },
     getData() {
 
-      this.isLoading = true;
-
-      let params = {};
-
-      apiClientiArgea.methods.getClientiCompany(params).then(function (response) {
-        this.isLoading = false;
+      let paramsClienti = {};
+      this.isLoadingClientiCompany = true;
+      apiClientiArgea.methods.getClientiCompany(paramsClienti).then(function (response) {
+        this.isLoadingClientiCompany = false;
         this.clientiCompany = response.data;
       }.bind(this));
 
-      this.isLoadingClienti=true;
+      this.isLoadingClienteArgea = true;
       if (this.clienteArgeaInEdit != null && this.clienteArgeaInEdit.id != null) {
-        let params2 = {id: this.clienteArgeaInEdit.id};
-        apiClientiArgea.methods.getClienteArgea(params2).then(function (response) {
-          this.isLoadingClienti = false;
+        let paramsClienteArgea = {id: this.clienteArgeaInEdit.id};
+        apiClientiArgea.methods.getClienteArgea(paramsClienteArgea).then(function (response) {
+          this.isLoadingClienteArgea = false;
           this.clienteArgeaLocalInEdit = response.data;
         }.bind(this));
       } else {
-        this.isLoadingClienti = false;
+        this.isLoadingClienteArgea = false;
         this.clienteArgeaLocalInEdit = {
           id: null
           , descrizione: null
@@ -209,17 +208,28 @@ export default {
       }
 
     },
-    salvaClienteArgea() {
-      if (!this.isValid) {
+    async salvaClienteArgea() {
+      await this.$refs['descrizione'].validate();
+      /*      this.formHasErrors = false
+
+            Object.keys(this.form).forEach(f => {
+              if (!this.form[f]) this.formHasErrors = true
+
+              this.$refs[f].validate(true)
+            })*/
+
+      if (!this.isFormClienteArgeaValid) {
         return;
       }
-      this.isLoading = true;
+
+      this.isLoadingClienteArgea = true;
       apiClientiArgea.methods.salvaClienteArgea(this.clienteArgeaLocalInEdit).then(function (response) {
-        this.isLoading = false;
+        this.isLoadingClienteArgea = false;
         this.clienteArgeaLocalInEdit = response.data;
         //TODO: emit evento di salvataggio completato
+        this.$emit('clienteSalvato', response.data);
       }.bind(this)).catch(function () {
-        this.isLoading = false;
+        this.isLoadingClienteArgea = false;
       }.bind(this));
     },
     startDrag(evt, item) {

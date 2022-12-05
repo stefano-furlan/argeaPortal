@@ -12,7 +12,7 @@
       <v-progress-linear v-show="isLoading" indeterminate color="black"></v-progress-linear>
       <EasyDataTable
         :headers="headers"
-        :items="data"
+        :items="clientiArgea"
       >
         <template #item-azioni="item">
           <v-btn icon color="primary" size="small" @click="editClienteArgea(item)" variant="text">
@@ -34,7 +34,32 @@
             <v-icon icon="mdi-close"></v-icon>
           </v-btn>
         </v-toolbar>
-        <cliente-argea-edit :cliente-argea-in-edit="clienteArgeaInEdit"></cliente-argea-edit>
+        <cliente-argea-edit :cliente-argea-in-edit="clienteArgeaInEdit"
+                            @cliente-salvato="onClienteSalvato"></cliente-argea-edit>
+      </v-card>
+
+    </v-dialog>
+
+    <v-dialog v-model="isClienteDeleteShown" persistent max-width="300">
+      <v-card v-if="isClienteDeleteShown">
+        <v-toolbar color="primary" dark density="compact">
+          <v-spacer></v-spacer>
+          <v-btn icon @click="isClienteDeleteShown=false">
+            <v-icon icon="mdi-close"></v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-card-text>
+          Eliminare il cliente ARGEA {{this.clienteArgeaInEdit.descrizione}}?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="grey" text @click="isClienteDeleteShown = false">
+            Annulla
+          </v-btn>
+          <v-btn color="green" dark @click="executeDeleteClienteArgea" :loading="isLoading">
+            Si
+          </v-btn>
+        </v-card-actions>
       </v-card>
 
     </v-dialog>
@@ -44,8 +69,8 @@
 import apiClientiArgea from "../web-api/apiClientiArgea";
 //import {Header, Item} from "vue3-easy-data-table";
 import clienteArgeaEdit from "@/components/ClienteArgeaEdit";
-
 import {useClienteArgeaStore} from '@/stores/clienteArgea';
+import findIndex from "lodash/findIndex";
 
 export default {
   setup() {
@@ -68,9 +93,10 @@ export default {
         {text: "", value: "azioni", width: 200},
       ],
       isClienteEditShown: false,
+      isClienteDeleteShown: false,
 
       //DATA
-      data: [],
+      clientiArgea: [],
       clienteArgeaInEdit: {}
     }
   },
@@ -97,7 +123,9 @@ export default {
 
       apiClientiArgea.methods.getClientiArgea(params).then(function (response) {
         this.isLoading = false;
-        this.data = response.data;
+        this.clientiArgea = response.data;
+      }.bind(this)).catch(function(){
+        this.isLoading = false;
       }.bind(this));
     },
     nuovoClienteArgea(item) {
@@ -116,8 +144,44 @@ export default {
       this.clienteArgeaInEdit = item;
       this.isClienteEditShown = true;
     },
+
     deleteClienteArgea(item) {
-      alert("implementare la delete! fare con un dialog");
+      this.clienteArgeaInEdit=item;
+      this.isClienteDeleteShown = true;
+    },
+    executeDeleteClienteArgea() {
+      let params = {};
+      let item= this.clienteArgeaInEdit;
+      this.isLoading = true;
+      apiClientiArgea.methods.eliminaClienteArgea(item).then(function (response) {
+        this.isLoading = false;
+
+        let index = findIndex(this.clientiArgea, {
+          id: item.id,
+        });
+        if (index >= 0) {
+          this.clientiArgea.splice(index, 1);
+        }
+        this.isClienteDeleteShown=false;
+      }.bind(this)).catch(function(){
+        this.isLoading = false;
+      }.bind(this));
+    },
+    onClienteSalvato(clienteArgea) {
+      //chiudo il popup
+      this.isClienteEditShown = false;
+      //evitiamo il becero reload che è brutto
+      //se esiste in lista rimpiazzo, else lo accodo
+      let index = findIndex(this.clientiArgea, {
+        id: clienteArgea.id,
+      });
+      if (index < 0) {
+        this.clientiArgea.push(clienteArgea);
+      } else {
+        this.clientiArgea.splice(index, 1, clienteArgea);
+      }
+
+
     }
 
   }

@@ -31,7 +31,12 @@ export default {
       let url = '/rs/' + BASEPATH + 'cliente-argea';
       return axios
         .put(url, clienteArgea)
-    }
+    },
+    eliminaClienteArgea: function (clienteArgea) {
+      let url = '/rs/' + BASEPATH + 'cliente-argea';
+      return axios
+        .delete(url, {data: clienteArgea})
+    },
 
   }
 

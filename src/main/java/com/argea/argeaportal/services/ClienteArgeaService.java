@@ -61,6 +61,7 @@ public class ClienteArgeaService {
     public ClienteArgeaDto salvaClienteArgea(ClienteArgeaDto clienteArgeaDto) {
 
         //controlli di integrità//non devo poter salvare un cliente argea con stessa descrizione di uno diverso che esiste già
+        //TODO:
 
 
         ClienteArgea clienteArgea;
@@ -69,7 +70,7 @@ public class ClienteArgeaService {
             clienteArgea = new ClienteArgea();
         } else {
             clienteArgea = clienteArgeaRepository.findById(clienteArgeaDto.getId()).orElse(null);
-            //TODO: sistemare i legami con hibernate
+            //TODO: sistemare i legami con hibernate: tutto questo codice è pedestre!
             legami = clienteCompanyClienteArgeaRepository.findAllByCodiceClienteArgea(clienteArgeaDto.getId());
             //TODO: levare questa parte quando si sistema hibernate
             //elimino tutti i legami e li ricreo...
@@ -90,6 +91,14 @@ public class ClienteArgeaService {
         clienteCompanyClienteArgeaRepository.saveAll(legami);
         clienteArgeaDto.setId(clienteArgea.getId());
         return clienteArgeaDto;
+    }
+
+    public void eliminaClienteArgea(ClienteArgeaDto clienteArgeaDto){
+        //controlli di integrità
+      Optional<ClienteArgea> clienteArgea=  clienteArgeaRepository.findById(clienteArgeaDto.getId());
+        if(clienteArgea.isPresent()){
+            clienteArgeaRepository.delete(clienteArgea.get());
+        }
     }
 
 

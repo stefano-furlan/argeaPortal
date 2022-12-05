@@ -46,6 +46,11 @@ public class RestMasterDataController {
         return clienteArgeaService.salvaClienteArgea(clienteArgeaDto);
     }
 
+    @DeleteMapping("/cliente-argea")
+    void eliminaClienteArgea(@RequestBody  ClienteArgeaDto clienteArgeaDto){
+        clienteArgeaService.eliminaClienteArgea(clienteArgeaDto);
+    }
+
     @GetMapping("/clienti-argea")
     Iterable<ClienteArgea> getClienti(){
         return clienteArgeaRepository.findAll();
