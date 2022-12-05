@@ -125,15 +125,14 @@
                                     </v-menu>-->
                   <v-menu
                     open-on-hover
-                    close-on-content-click
                     location="center"
                   >
                     <template v-slot:activator="{ props }">
 
                       <v-icon v-bind="props" icon="mdi-account-check" size="small"
-                              v-show="item.codiceClienteArgea!=null && item.codiceClienteArgea==clienteArgeaLocalInEdit.id"></v-icon>
+                              v-show="item.codiceClienteArgea!=null && clienteArgeaLocalInEdit!=null && item.codiceClienteArgea==clienteArgeaLocalInEdit.id"></v-icon>
                       <v-icon v-bind="props" icon="mdi-account-cancel" size="small"
-                              v-show="item.codiceClienteArgea!=null && item.codiceClienteArgea!=clienteArgeaLocalInEdit.id"></v-icon>
+                              v-show="item.codiceClienteArgea!=null && clienteArgeaLocalInEdit!=null && item.codiceClienteArgea!=clienteArgeaLocalInEdit.id"></v-icon>
 
                     </template>
 

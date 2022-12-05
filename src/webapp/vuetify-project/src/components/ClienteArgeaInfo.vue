@@ -3,11 +3,31 @@
 
     <v-progress-circular v-show="clienteArgea==null" indeterminate color="primary"></v-progress-circular>
     <div v-if="clienteArgea!=null">
-      <v-card>
+      <v-card max-height="400px">
         <v-toolbar color="grey" density="compact" title="cliente argea"></v-toolbar>
         <v-card-text>
           <div>{{ clienteArgea.id }}</div>
           <div>{{ clienteArgea.descrizione }}</div>
+          <v-list lines="one" density="compact" max-height="300px">
+            <v-list-item
+              v-for="(item,index) in clienteArgea.clientiCompany"
+              :key="index"
+            >
+              {{ item.company }} - {{ item.codiceClienteCompany }}
+              <v-list-item-subtitle>
+                {{ item.descrizione }}
+              </v-list-item-subtitle>
+
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+      </v-card>
+
+    </div>
+
+    <!--    <div>{{ clienteArgea.id }}</div>
+        <div>{{ clienteArgea.descrizione }}</div>
+        <div>
           <v-list lines="one">
             <v-list-item
               v-for="(item,index) in clienteArgea.clientiCompany"
@@ -16,23 +36,7 @@
             >{{item.company}}-{{item.descrizione}}
             </v-list-item>
           </v-list>
-        </v-card-text>
-      </v-card>
-
-    </div>
-
-<!--    <div>{{ clienteArgea.id }}</div>
-    <div>{{ clienteArgea.descrizione }}</div>
-    <div>
-      <v-list lines="one">
-        <v-list-item
-          v-for="(item,index) in clienteArgea.clientiCompany"
-          :key="index"
-          :title="item.descrizione"
-        >{{item.company}}-{{item.descrizione}}
-        </v-list-item>
-      </v-list>
-    </div>-->
+        </div>-->
   </div>
 </template>
 
