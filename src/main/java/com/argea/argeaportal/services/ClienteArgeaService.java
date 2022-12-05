@@ -6,6 +6,8 @@ import com.argea.argeaportal.database.clienteargea.ClienteArgea;
 import com.argea.argeaportal.database.clienteargea.ClienteArgeaRepository;
 import com.argea.argeaportal.database.clientecompany.*;
 import com.argea.argeaportal.dto.ClienteArgeaDto;
+import com.argea.argeaportal.rest.errorHandling.PortalErrorResponse;
+import com.argea.argeaportal.rest.errorHandling.PortalOperationNotPermittedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +63,17 @@ public class ClienteArgeaService {
     public ClienteArgeaDto salvaClienteArgea(ClienteArgeaDto clienteArgeaDto) {
 
         //controlli di integrità//non devo poter salvare un cliente argea con stessa descrizione di uno diverso che esiste già
-        //TODO:
+        List<ClienteArgea> clientiArgea=null;
+        if(clienteArgeaDto.getId()==null){
+            clientiArgea= clienteArgeaRepository.findAllByDescrizioneIgnoreCase(clienteArgeaDto.getDescrizione());
+        }else{
+            clientiArgea= clienteArgeaRepository.findAllByDescrizioneIgnoreCaseAndIdNot(clienteArgeaDto.getDescrizione(),clienteArgeaDto.getId());
+        }
+        if(clientiArgea!=null && !clientiArgea.isEmpty()){
+            //ERRORE!
+            throw new PortalOperationNotPermittedException("Esiste già un cliente argea con questa descrizione");
+        }
+
 
 
         ClienteArgea clienteArgea;

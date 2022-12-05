@@ -95,7 +95,8 @@
                   <v-icon icon="mdi-drag" size="small" draggable="true" class="draggable"
                           v-show="item.codiceClienteArgea==null"
                           @dragstart="startDrag($event, item)"></v-icon>
-                  <v-icon icon="mdi-account-check" size="small" v-show="item.codiceClienteArgea!=null"></v-icon>
+                  <v-icon icon="mdi-account-check" size="small" v-show="item.codiceClienteArgea!=null && item.codiceClienteArgea==clienteArgeaLocalInEdit.id"></v-icon>
+                  <v-icon icon="mdi-account-cancel" size="small" v-show="item.codiceClienteArgea!=null && item.codiceClienteArgea!=clienteArgeaLocalInEdit.id"></v-icon>
                 </template>
 
               </EasyDataTable>

@@ -13,8 +13,8 @@ public interface ClienteArgeaRepository extends CrudRepository<ClienteArgea, Int
      * @return lista clienti argea che matchano
      */
     List<ClienteArgea> findAllByDescrizioneLikeIgnoreCase(String descrizione);
-
-
+    List<ClienteArgea> findAllByDescrizioneIgnoreCase(String descrizione);
+    List<ClienteArgea> findAllByDescrizioneIgnoreCaseAndIdNot(String descrizione,Integer id);
 
     /***
      * esempio di query HQL, i nome campo sono i nomi dei campi della classe entity (e non del db) e garantisce database independence

@@ -58,3 +58,10 @@ https://materialdesignicons.com/
 ```sh
 https://next.vuetifyjs.com/en/
 ```
+
+### TOASTER
+
+```sh
+https://github.com/MeForma/vue-toaster
+```
+
