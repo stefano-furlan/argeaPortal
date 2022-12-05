@@ -126,7 +126,7 @@
                   <v-menu
                     open-on-hover
                     close-on-content-click
-
+                    location="center"
                   >
                     <template v-slot:activator="{ props }">
 
