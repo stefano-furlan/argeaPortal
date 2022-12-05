@@ -2,7 +2,7 @@ package com.argea.argeaportal.rest;
 
 import com.argea.argeaportal.database.clienteargea.ClienteArgea;
 import com.argea.argeaportal.database.clienteargea.ClienteArgeaRepository;
-import com.argea.argeaportal.database.clientecompany.ClienteCompany;
+import com.argea.argeaportal.database.clientecompany.ClienteCompanyInfo;
 import com.argea.argeaportal.database.clientecompany.ClienteCompanyRepository;
 import com.argea.argeaportal.dto.ClienteArgeaDto;
 import com.argea.argeaportal.services.ClienteArgeaService;
@@ -32,7 +32,7 @@ public class RestMasterDataController {
 
     @PostMapping("/cliente-argea")
     ClienteArgeaDto saveClienteArgea(@RequestBody ClienteArgeaDto clienteArgea) {
-        //TODO: aggiungere eventuali controlli di integrità
+
         return clienteArgeaService.salvaClienteArgea(clienteArgea);
     }
 
@@ -52,8 +52,8 @@ public class RestMasterDataController {
     }
 
     @GetMapping("/clienti-company")
-    Iterable<ClienteCompany> getClientiGestionali(){
-        return clienteCompanyRepository.findAll();
+    Iterable<ClienteCompanyInfo> getClientiGestionali(){
+        return clienteArgeaService.findAllClientiCompanyInfo();
     }
 
 

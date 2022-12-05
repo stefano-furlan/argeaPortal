@@ -1,12 +1,16 @@
 package com.argea.argeaportal.database.clientecompany;
 
+
+import org.hibernate.annotations.Immutable;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "cliente_company")
+@Immutable
+@Table(name = "vwClientiCompanyInfo")
 @IdClass(ClienteCompanyId.class)
-public class ClienteCompany implements Serializable {
+public class ClienteCompanyInfo implements Serializable {
 
     @Id
     @Column(name = "company")
@@ -32,6 +36,9 @@ public class ClienteCompany implements Serializable {
 
     @Column(name = "codice_area_manager")
     private String codiceAreaManager;
+
+    @Column(name = "codice_cliente_argea")
+    String codiceClienteArgea;
 
     public String getCompany() {
         return company;
@@ -87,5 +94,13 @@ public class ClienteCompany implements Serializable {
 
     public void setCodiceAreaManager(String codiceAreaManager) {
         this.codiceAreaManager = codiceAreaManager;
+    }
+
+    public String getCodiceClienteArgea() {
+        return codiceClienteArgea;
+    }
+
+    public void setCodiceClienteArgea(String codiceClienteArgea) {
+        this.codiceClienteArgea = codiceClienteArgea;
     }
 }

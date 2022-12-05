@@ -4,9 +4,7 @@ import com.argea.argeaportal.database.ClienteCompanyClienteArgea;
 import com.argea.argeaportal.database.ClienteCompanyClienteArgeaRepository;
 import com.argea.argeaportal.database.clienteargea.ClienteArgea;
 import com.argea.argeaportal.database.clienteargea.ClienteArgeaRepository;
-import com.argea.argeaportal.database.clientecompany.ClienteCompany;
-import com.argea.argeaportal.database.clientecompany.ClienteCompanyId;
-import com.argea.argeaportal.database.clientecompany.ClienteCompanyRepository;
+import com.argea.argeaportal.database.clientecompany.*;
 import com.argea.argeaportal.dto.ClienteArgeaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +26,16 @@ public class ClienteArgeaService {
     @Autowired
     ClienteCompanyRepository clienteCompanyRepository;
 
+    @Autowired
+    ClienteCompanyInfoRepository clienteCompanyInfoRepository;
+
     public Optional<ClienteArgeaDto> getClienteArgea(Integer idCliente) {
         Optional<ClienteArgea> clienteArgea = clienteArgeaRepository.findById(idCliente);
+
+        if(!clienteArgea.isPresent()){
+            //FIXME: creare eccezione e gestire a livello generale
+            return null;
+        }
 
         ClienteArgeaDto clienteArgeaDto = new ClienteArgeaDto();
         clienteArgeaDto.setId(clienteArgea.get().getId());
@@ -53,7 +59,10 @@ public class ClienteArgeaService {
     }
 
     public ClienteArgeaDto salvaClienteArgea(ClienteArgeaDto clienteArgeaDto) {
-        //TODO
+
+        //controlli di integrità//non devo poter salvare un cliente argea con stessa descrizione di uno diverso che esiste già
+
+
         ClienteArgea clienteArgea;
         List<ClienteCompanyClienteArgea> legami = new ArrayList<>();
         if (clienteArgeaDto.getId() == null) {
@@ -83,5 +92,9 @@ public class ClienteArgeaService {
         return clienteArgeaDto;
     }
 
+
+    public Iterable<ClienteCompanyInfo> findAllClientiCompanyInfo() {
+        return clienteCompanyInfoRepository.findAll();
+    }
 
 }

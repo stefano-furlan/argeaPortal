@@ -46,4 +46,11 @@ export default {
   background: -ms-linear-gradient(156deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 90%);
   background: linear-gradient(156deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 90%);
 }
+.draggable:hover {
+  cursor: grab;
+}
+
+.padded-card {
+  margin: 10px;
+}
 </style>

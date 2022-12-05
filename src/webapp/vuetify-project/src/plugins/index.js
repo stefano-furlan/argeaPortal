@@ -7,6 +7,7 @@
 // Plugins
 import { loadFonts } from './webfontloader'
 import vuetify from './vuetify'
+import './axios'
 
 export function registerPlugins (app) {
   loadFonts()

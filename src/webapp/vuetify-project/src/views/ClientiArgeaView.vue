@@ -23,27 +23,39 @@
           </v-btn>
         </template>
       </EasyDataTable>
-      clienteArgeaStore.clienteArgea={{clienteArgeaStore.clienteArgea}}
+
     </v-card>
 
+    <v-dialog v-model="isClienteEditShown" persistent>
+      <v-card v-if="isClienteEditShown">
+        <v-toolbar color="primary" dark density="compact">
+          <v-spacer></v-spacer>
+          <v-btn icon @click="isClienteEditShown=false">
+            <v-icon icon="mdi-close"></v-icon>
+          </v-btn>
+        </v-toolbar>
+        <cliente-argea-edit :cliente-argea-in-edit="clienteArgeaInEdit"></cliente-argea-edit>
+      </v-card>
+
+    </v-dialog>
   </div>
 </template>
 <script>
 import apiClientiArgea from "../web-api/apiClientiArgea";
 //import {Header, Item} from "vue3-easy-data-table";
+import clienteArgeaEdit from "@/components/ClienteArgeaEdit";
 
-import { useClienteArgeaStore } from '@/stores/clienteArgea';
+import {useClienteArgeaStore} from '@/stores/clienteArgea';
 
 export default {
-  setup(){
+  setup() {
     const clienteArgeaStore = useClienteArgeaStore()
-
     return {
       // you can return the whole store instance to use it in the template
       clienteArgeaStore,
     }
   },
-  //components: { InterventoManutenzioneEditor},
+  components: {clienteArgeaEdit},
   //mixins: [globalMixins, agGridMixins],
   data() {
     return {
@@ -55,8 +67,11 @@ export default {
         {text: "Descrizione", value: "descrizione"},
         {text: "", value: "azioni", width: 200},
       ],
+      isClienteEditShown: false,
+
       //DATA
       data: [],
+      clienteArgeaInEdit: {}
     }
   },
   beforeMount: function () {
@@ -88,14 +103,21 @@ export default {
     nuovoClienteArgea(item) {
       //mi sposto in pagina edit
 
+      this.clienteArgeaInEdit = {
+        id: null,
+        descrizione: null,
+        clientiCompany: []
+      };
+
+      this.isClienteEditShown = true;
     },
     editClienteArgea(item) {
       //salvo nello store l'oggetto
-      this.clienteArgeaStore.clienteArgea=item;
-      this.$router.push('/associazioneclientiargea');
+      this.clienteArgeaInEdit = item;
+      this.isClienteEditShown = true;
     },
     deleteClienteArgea(item) {
-      alert(item);
+      alert("implementare la delete! fare con un dialog");
     }
 
   }
