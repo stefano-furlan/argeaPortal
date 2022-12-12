@@ -15,6 +15,8 @@ public class ClienteArgea implements Serializable {
     @Column(name = "descrizione")
     private String descrizione;
 
+    @Column(name = "intercompany")
+    private Boolean intercompany;
 
     public Integer getId() {
         return id;
@@ -30,5 +32,13 @@ public class ClienteArgea implements Serializable {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public Boolean getIntercompany() {
+        return intercompany;
+    }
+
+    public void setIntercompany(Boolean intercompany) {
+        this.intercompany = intercompany;
     }
 }

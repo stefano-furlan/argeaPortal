@@ -49,8 +49,11 @@
                         density="compact"
                         hide-details="auto"
                       ></v-text-field>
-                    </v-col>
 
+                    </v-col>
+                    <v-col>
+                      <v-checkbox label="Intercompany" v-model="clienteArgeaLocalInEdit.intercompany"></v-checkbox>
+                    </v-col>
                   </v-row>
                 </v-container>
               </v-form>

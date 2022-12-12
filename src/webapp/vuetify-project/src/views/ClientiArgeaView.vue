@@ -15,6 +15,15 @@
         :items="clientiArgea"
         alternating
       >
+        <template #item-altreinfovarie="item">
+
+          <v-tooltip text="Intercompany">
+            <template v-slot:activator="{ props }">
+              <v-icon v-show="item.intercompany" v-bind="props" icon="mdi-domain"></v-icon>
+            </template>
+          </v-tooltip>
+
+        </template>
         <template #item-azioni="item">
           <v-btn icon color="primary" size="small" @click="editClienteArgea(item)" variant="text">
             <v-icon icon="mdi-pencil" size="small"></v-icon>
@@ -50,7 +59,7 @@
           </v-btn>
         </v-toolbar>
         <v-card-text>
-          Eliminare il cliente ARGEA {{this.clienteArgeaInEdit.descrizione}}?
+          Eliminare il cliente ARGEA {{ this.clienteArgeaInEdit.descrizione }}?
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -89,8 +98,9 @@ export default {
       //window workings
       isLoading: false,
       headers: [
-        {text: "ID", value: "id", sortable: true },
-        {text: "Descrizione", value: "descrizione", sortable: true },
+        {text: "ID", value: "id", sortable: true},
+        {text: "Descrizione", value: "descrizione", sortable: true},
+        {text: "Altre info", value: "altreinfovarie", sortable: false},
         {text: "", value: "azioni", width: 200},
       ],
       isClienteEditShown: false,
@@ -125,7 +135,7 @@ export default {
       apiClientiArgea.methods.getClientiArgea(params).then(function (response) {
         this.isLoading = false;
         this.clientiArgea = response.data;
-      }.bind(this)).catch(function(){
+      }.bind(this)).catch(function () {
         this.isLoading = false;
       }.bind(this));
     },
@@ -147,12 +157,12 @@ export default {
     },
 
     deleteClienteArgea(item) {
-      this.clienteArgeaInEdit=item;
+      this.clienteArgeaInEdit = item;
       this.isClienteDeleteShown = true;
     },
     executeDeleteClienteArgea() {
       let params = {};
-      let item= this.clienteArgeaInEdit;
+      let item = this.clienteArgeaInEdit;
       this.isLoading = true;
       apiClientiArgea.methods.eliminaClienteArgea(item).then(function (response) {
         this.isLoading = false;
@@ -163,8 +173,8 @@ export default {
         if (index >= 0) {
           this.clientiArgea.splice(index, 1);
         }
-        this.isClienteDeleteShown=false;
-      }.bind(this)).catch(function(){
+        this.isClienteDeleteShown = false;
+      }.bind(this)).catch(function () {
         this.isLoading = false;
       }.bind(this));
     },

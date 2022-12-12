@@ -8,6 +8,8 @@ import com.argea.argeaportal.database.clientecompany.*;
 import com.argea.argeaportal.dto.ClienteArgeaDto;
 import com.argea.argeaportal.rest.errorHandling.PortalErrorResponse;
 import com.argea.argeaportal.rest.errorHandling.PortalOperationNotPermittedException;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,13 +37,17 @@ public class ClienteArgeaService {
         Optional<ClienteArgea> clienteArgea = clienteArgeaRepository.findById(idCliente);
 
         if (!clienteArgea.isPresent()) {
-            //FIXME: creare eccezione e gestire a livello generale
-            return null;
+            throw new PortalOperationNotPermittedException("specificare un codice cliente");
         }
 
-        ClienteArgeaDto clienteArgeaDto = new ClienteArgeaDto();
-        clienteArgeaDto.setId(clienteArgea.get().getId());
-        clienteArgeaDto.setDescrizione(clienteArgea.get().getDescrizione());
+        //MODELMAPPER è una libreria che rende semplice la gestione del mapping tra dto e oggetto
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration()
+                .setFieldMatchingEnabled(true)
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setPreferNestedProperties(false);
+
+        ClienteArgeaDto clienteArgeaDto = modelMapper.map(clienteArgea.get(), ClienteArgeaDto.class);
         clienteArgeaDto.setClientiCompany(new ArrayList<>());
 
         //FIXME: fare con vista
@@ -75,10 +81,10 @@ public class ClienteArgeaService {
         }
 
 
-        ClienteArgea clienteArgea;
+        ClienteArgea clienteArgea = new ClienteArgea();
         List<ClienteCompanyClienteArgea> legami = new ArrayList<>();
         if (clienteArgeaDto.getId() == null) {
-            clienteArgea = new ClienteArgea();
+
         } else {
             clienteArgea = clienteArgeaRepository.findById(clienteArgeaDto.getId()).orElse(null);
             //TODO: sistemare i legami con hibernate: tutto questo codice è pedestre!
@@ -86,10 +92,21 @@ public class ClienteArgeaService {
             //TODO: levare questa parte quando si sistema hibernate
             //elimino tutti i legami e li ricreo...
             legami.clear();
+
             clienteCompanyClienteArgeaRepository.saveAll(legami);
         }
 
-        clienteArgea.setDescrizione(clienteArgeaDto.getDescrizione());
+        //TODO: fare con modelmapper
+/*        clienteArgea.setIntercompany(clienteArgeaDto.getIntercompany());
+        clienteArgea.setDescrizione(clienteArgeaDto.getDescrizione());*/
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration()
+                .setFieldMatchingEnabled(true)
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setPreferNestedProperties(false);
+        clienteArgea = modelMapper.map(clienteArgeaDto, ClienteArgea.class);
+
+
         clienteArgea = clienteArgeaRepository.save(clienteArgea);
 
         for (ClienteCompany c : clienteArgeaDto.getClientiCompany()) {

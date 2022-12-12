@@ -13,6 +13,8 @@ public class ClienteArgeaDto {
 
     private Integer id;
 
+    Boolean intercompany;
+
     List<ClienteCompany> clientiCompany;
 
     public String getDescrizione() {
@@ -37,5 +39,13 @@ public class ClienteArgeaDto {
 
     public void setClientiCompany(List<ClienteCompany> clientiCompany) {
         this.clientiCompany = clientiCompany;
+    }
+
+    public Boolean getIntercompany() {
+        return intercompany;
+    }
+
+    public void setIntercompany(Boolean intercompany) {
+        this.intercompany = intercompany;
     }
 }
