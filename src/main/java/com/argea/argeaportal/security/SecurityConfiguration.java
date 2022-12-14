@@ -60,7 +60,8 @@ public class SecurityConfiguration {
                                 .anyRequest().permitAll()
                 );
 
-        http.csrf().disable();//TODO:LEVARE!SOLO PER PROFILO DEV!
+        http.cors().and().csrf()
+                .disable();//TODO:LEVARE!SOLO PER PROFILO DEV!
 
 
         return http.build();
